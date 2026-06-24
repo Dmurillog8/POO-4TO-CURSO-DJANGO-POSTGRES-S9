@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2>Mis notas</h2>
+  <a href="{% url 'core:note_create' %}" class="btn btn-success">+ Nueva nota</a>
+</div>
+{% if notes %}
+  <div class="row">
+    {% for note in notes %}
+      <div class="col-md-4 mb-3">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">{{ note.title }}</h5>
+            <p class="card-text">{{ note.body|linebreaksbr }}</p>
+            <p class="text-muted small">{{ note.created_at|date:"d/m/Y H:i" }}</p>
+            <form method="post" action="{% url 'core:note_delete' note.pk %}" style="display:inline">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="alert alert-info">No tienes notas aún. ¡Crea tu primera nota!</div>
+{% endif %}
+{% endblock %}
